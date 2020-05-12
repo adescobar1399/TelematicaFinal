@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+	<title>Covid-19</title>
+	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	<script src="https://kit.fontawesome.com/d426461ada.js" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="js/jquery-3.5.0.min.js"></script>
+	<script type="text/javascript" src="js/dist/Chart.bundle.min.js"></script>
+</head>
+<body>
+	<nav id="menu">
+		<ul>
+			<li><a href="#tab1">Inicio</a></li>
+			<li class="barrraseparadora">|</li>
+			<li><a href="#tab2">Registrar Caso</a></li>
+			<li class="barrraseparadora">|</li>
+			<li><a href="#tab3">Gestionar Caso</a></li>
+			<li class="barrraseparadora">|</li>
+			<li><a href="#tab5">Visualización</a></li>
+			<li class="barrraseparadora">|</li>
+			<li><a href="#tab4">Login</a></li>
+		</ul>
+	</nav>
+	<div class="secciones">
+		<article id="tab1">
+			<div class="pie">	
+				<h1>Grafico PIE de Casos Confirmados</h1>
+				<canvas id="chart"></canvas>
+			</div>
+			<div class="pie">	
+				<h1>Grafico X vs Y de Casos Registrados por Dia</h1>
+				<canvas id="chart2"></canvas>
+			</div>
+			
+		</article>
+		<article id="tab2">
+			<div class="contenedor-formulario">
+				<form action="" class="formulario" name="formulario_registro" method="post">
+					<div class="cuerpodelformulario">
+						<div class="input-group">
+							<label for="nombre">Nombre</label>
+							<input type="text" id="nombre" placeholder="Nombre">
+						</div>
+						<div class="input-group">
+							<label for="apellido">Apellido</label>
+							<input type="text" id="apellido" placeholder="Apellido">
+						</div>
+						<div class="input-group">
+							<label for="dedula">Cedula</label>
+							<input type="number" id="cedula" placeholder="Cedula">
+						</div>
+						<div class="input-groupdate">
+							<label for="">  </label>
+							<label for="borndate">Fecha de Nacimiento</label>
+							<input type="date" id="borndate" >
+						</div>
+						<div class="input-groupdate">
+							<label for="sickdate">Fecha de Infección</label>
+							<input type="date" id="sickdate" >
+						</div>
+						<div class="input-group">
+							<label for="direccionr">Direccion de Residencia</label>
+							<input type="text" id="direccionr" placeholder="Direccion de Residencia">
+						</div>
+						<div class="input-group">
+							<label for="direcciont">Direccion de Trabajo</label>
+							<input type="text" id="direcciont" placeholder="Direccion de Trabajo">
+						</div>
+						<div class="input-groupradio">
+							<p>Genero</p>
+							<div>
+								<label for="">
+									<input type="radio" name="sexo">
+									<i class="fas fa-male"></i>
+								</label>
+								<label for="">
+									<input type="radio" name="sexo">
+									<i class="fas fa-female"></i>
+								</label>
+							</div>
+						</div>
+						<div class="input-groupradio">
+							<p>Resultado de la Prueba</p>
+							<div>
+								<label for="">
+									<input type="radio" name="resultado">
+									<i class="fas fa-user-plus"></i>
+								</label>
+								<label for="">
+									<input type="radio" name="resultado">
+									<i class="fas fa-user-minus"></i>
+								</label>
+							</div>
+						</div>
+						<input type="submit" id="btn-submit" value="Registrar">
+					</div>
+				</form>
+			</div>
+		</article>
+		<article id="tab3">
+			<P>333333333333</P>
+		</article>
+		<article id="tab4">
+			<div class="login-box">
+				<h1>Login</h1>
+				<div class="textbox">
+					<i class="fas fa-user"></i>
+					<input type="text" placeholder="Username" name="">
+				</div>
+				<div class="textbox">
+					<i class="fas fa-lock"></i>
+					<input type="password" placeholder="Password" name="">
+				</div>
+				<input class="btn" type="button" name="" value="Sign In">
+			</div>
+		</article>
+	</div>
+</body>
+</html>
+
+<script type="text/javascript">
+//Inicio de pagina
+$(document).ready(function(){
+	$('#menu ul li a:first').addClass('active');
+	$('.secciones article').hide(); /* Ocultamos a todos */
+	$('.secciones article:first').show();
+	inicio();
+	$('#menu ul li a').click(function tabsclick(){ /* Cuando le undamos click a un enlace se va a ejecutar una funcion */
+		$('#menu ul li a').removeClass('active');
+		$(this).addClass('active');
+		$('.secciones article').hide();   /* Cuando hagamos clik todas las secciones se ocultan */
+		activeTab = $(this).attr('href'); /* Cuando le undamos click va a traer el atributo del href */
+		$(activeTab).show();
+	});
+});	
+function inicio(){
+	activeTab = '#tab1'
+};
+//
+$(document).ready(function(){
+			var datos = {
+				type: "pie",
+				data: {
+					datasets: [{
+						data: [
+							5,
+							10,
+							40,
+							12,
+							20,
+						],
+						backgroundColor: [
+							"#FF1A00",
+							"#0100FF",
+							"#00FF1a",
+							"#FF9A00",
+							"#FF00E5",
+						],
+					}],
+					labels: [
+						"Muerte",
+						"Tratamiento",
+						"Negativo",
+						"UCI",
+						"Curado",
+					]
+				},
+				options: {
+					responsive: true,
+				}
+			};
+			var canvas = document.getElementById("chart").getContext('2d');
+			window.pie = new Chart(canvas,datos);
+
+			setInterval(function(){
+				datos.data.datasets.splice(0); // Eliminar Datos
+				var newData = {
+					backgroundColor:["#FF1A00","#0100FF","#00FF1a","#FF9A00","#FF00E5"],
+					data: [getRandom(),getRandom(),getRandom(),getRandom(),getRandom()]//Obtener Nuevos Datos
+				}
+				datos.data.datasets.push(newData); // Colocamos nuevos datos en Graph
+				window.pie.update(); // Actualizamos
+			},2500) // Cada 2.5 Seg
+
+			function getRandom(){
+				return Math.round(Math.random()*100);
+			}
+
+		});
+
+//---------------------------
+$(document).ready(function(){
+			var datos = {
+				type: "line",
+				data: {
+					datasets: [{
+						data: [
+							5,
+							10,
+							40,
+							12,
+							20,
+						],
+						backgroundColor: [
+							"#FF1A00",
+							"#0100FF",
+							"#00FF1a",
+							"#FF9A00",
+							"#FF00E5",
+						],
+					}],
+					labels: [
+						"Muerte",
+						"Tratamiento",
+						"Negativo",
+						"UCI",
+						"Curado",
+					]
+				},
+				options: {
+					responsive: true,
+					scales: {
+            			yAxes: [{
+               				ticks: {
+                    			beginAtZero: true
+                			}
+            			}]
+       				}
+				}
+			};
+			var canvas = document.getElementById("chart2").getContext('2d');
+			window.line = new Chart(canvas,datos);
+
+			setInterval(function(){
+				datos.data.datasets.splice(0); // Eliminar Datos
+				var newData = {
+					backgroundColor:["#FF1A00","#0100FF","#00FF1a","#FF9A00","#FF00E5"],
+					data: [getRandom(),getRandom(),getRandom(),getRandom(),getRandom()]//Obtener Nuevos Datos
+				}
+				datos.data.datasets.push(newData); // Colocamos nuevos datos en Graph
+				window.line.update(); // Actualizamos
+			},2500) // Cada 2.5 Seg
+
+			function getRandom(){
+				return Math.round(Math.random()*100);
+			}
+
+		});
+</script>
